@@ -45,11 +45,29 @@ const agregarTarea = tarea =>{
 }
 
 const imprimitTareas = () => {
+
+    if(Object.values(tareas).length === 0){
+        listaTareas.innerHTML = `
+        <div class="alert alert-dark text-center">
+            No hay tareas pendientes 🎈
+        </div>
+        `
+        return
+    }
+
+
     listaTareas.innerHTML = ""
 
     Object.values(tareas).forEach(t => {
         const clone = template.cloneNode(true)
         clone.querySelector('p').textContent = t.texto
+
+        if(t.estado){
+            clone.querySelector('.alert').classList.replace('alert-warning','alert-primary')
+            clone.querySelector('.fas').classList.replace('fa-check-circle','fa-undo-alt')
+            clone.querySelector('p').style.textDecoration = "line-through"
+        }
+
         clone.querySelectorAll('.fas')[0].dataset.id = t.id
         clone.querySelectorAll('.fas')[1].dataset.id = t.id
         fragment.appendChild(clone)
@@ -61,7 +79,22 @@ const imprimitTareas = () => {
 
 const btnAccion = e => {
     if(e.target.classList.contains('fa-check-circle')){
-        
+        tareas[e.target.dataset.id].estado = true
+        imprimitTareas()
+        // console.log(tareas)
+
+    }
+
+    if(e.target.classList.contains('fa-minus-circle')){
+        delete tareas[e.target.dataset.id]
+        imprimitTareas()
+        console.log(tareas)
+    }
+
+    if(e.target.classList.contains('fa-undo-alt')){
+        tareas[e.target.dataset.id].estado = false
+        imprimitTareas()
+        // console.log(tareas)
 
     }
 
