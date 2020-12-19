@@ -1,13 +1,19 @@
 const formulario = document.querySelector('#formulario')
-const listaTares = document.querySelector('#lista-tareas')
+const listaTareas = document.querySelector('#lista-tareas')
 const template = document.querySelector('#template').content
 const fragment = document.createDocumentFragment()
 
 let tareas = {
-
+    
 }
 
-// console.log(Date.now())
+document.addEventListener('DOMContentLoaded', () => {
+    imprimitTareas()
+})
+
+listaTareas.addEventListener('click',e => {
+    btnAccion(e)
+})
 
 formulario.addEventListener('submit' , e => {
     e.preventDefault()
@@ -29,6 +35,7 @@ const agregarTarea = tarea =>{
         texto:tarea,
         estado:false
     }
+
     tareas[tareaAObjeto.id] = tareaAObjeto
     console.log(tareas)
     formulario.reset()
@@ -38,11 +45,25 @@ const agregarTarea = tarea =>{
 }
 
 const imprimitTareas = () => {
+    listaTareas.innerHTML = ""
+
     Object.values(tareas).forEach(t => {
         const clone = template.cloneNode(true)
         clone.querySelector('p').textContent = t.texto
+        clone.querySelectorAll('.fas')[0].dataset.id = t.id
+        clone.querySelectorAll('.fas')[1].dataset.id = t.id
         fragment.appendChild(clone)
     })
-    listaTares.appendChild(fragment)
+    
+    listaTareas.appendChild(fragment)
 }
  
+
+const btnAccion = e => {
+    if(e.target.classList.contains('fa-check-circle')){
+        
+
+    }
+
+    e.stopPropagation()
+}
